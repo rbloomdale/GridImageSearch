@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -8,36 +8,93 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ImageSearchActivity" >
 
-    <EditText
-        android:id="@+id/etSearchField"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llSearchContainer"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="Search Words"
-        android:inputType="textAutoComplete" >
+        android:layout_alignParentTop="true" >
 
-        <requestFocus />
-    </EditText>
+	    <EditText
+	        android:id="@+id/etSearchField"
+	        android:layout_width="0dp"
+	        android:layout_height="50dp"
+	        android:layout_weight="8"
+	        android:hint="Search Words"
+	        android:inputType="textAutoComplete" >
+	
+	        <requestFocus
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/etSearchField"
-        android:layout_alignBottom="@+id/etSearchField"
-        android:layout_toRightOf="@+id/etSearchField"
-        android:text="Search" 
-        android:onClick="onImageSearch"/>
+	    </EditText>
+	
+	    <Button
+	        android:id="@+id/btnSearch"
+	        android:layout_width="0dp"
+	        android:layout_height="50dp"
+	        android:layout_weight="4"
+	        android:maxWidth="75dp"
+	        android:onClick="onImageSearch"
+	        android:text="Search" />
 
+	</LinearLayout>
+	
+	<RelativeLayout
+	    android:id="@+id/advancedOptionsContainer"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/llSearchContainer"
+	    android:visibility="gone" >
+
+	    <Spinner
+	        android:id="@+id/spSizeOptions"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left"
+	        android:entries="@array/options_size_choices"
+	        android:prompt="@string/size_options_prompt" />
+
+	    <Spinner
+	        android:id="@+id/spColorOptions"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/spSizeOptions"
+	        android:layout_toRightOf="@+id/spSizeOptions"
+	        android:entries="@array/options_color_choices"
+	        android:minWidth="25dp"
+	        android:prompt="@string/color_options_prompt" />
+
+	    <Spinner
+	        android:id="@+id/spTypeOptions"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/spSizeOptions"
+	        android:layout_toRightOf="@+id/spColorOptions"
+	        android:entries="@array/options_type_choices"
+	        android:minWidth="25dp" 
+	        android:prompt="@string/type_options_prompt" />
+
+	    <EditText
+	        android:id="@+id/etSiteOptionField"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/spSizeOptions"
+	        android:hint="Website"
+	        android:inputType="textAutoComplete|textUri" >
+
+	    </EditText>
+    </RelativeLayout>
+    
     <GridView
         android:id="@+id/gvSearchResults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etSearchField"
-        android:layout_below="@+id/etSearchField"
+        android:layout_alignLeft="@+id/llSearchContainer"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/advancedOptionsContainer"
         android:numColumns="3" >
+
     </GridView>
 
 </RelativeLayout>
