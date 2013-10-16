@@ -79,7 +79,7 @@ public class ImageSearchActivity extends Activity {
 		rlAdvancedOptions = (RelativeLayout) findViewById(R.id.advancedOptionsContainer);
 	}
 	
-	public void toggleAdvancedOptions(MenuItem item)
+	public boolean toggleAdvancedOptions(MenuItem item)
 	{
 		Boolean visible = rlAdvancedOptions.getVisibility() == View.VISIBLE;
 		if(visible)
@@ -90,6 +90,7 @@ public class ImageSearchActivity extends Activity {
 		{
 			rlAdvancedOptions.setVisibility(View.VISIBLE);
 		}
+		return true;
 	}
 	
 	public void onImageSearch(View v){
@@ -105,16 +106,19 @@ public class ImageSearchActivity extends Activity {
 					try{
 						imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
 						imageAdapter.clear();
-						imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
+						ArrayList<ImageResult> imageResults = ImageResult.fromJSONArray(imageJsonResults);
+						for (int i = 0; i < imageResults.size(); i++) {
+							imageAdapter.add(imageResults.get(i));
+					    }						
 					} catch (JSONException e) {
 						e.printStackTrace();
-						Log.d("MYDEBUG", "failed to connect" + e.getMessage());
+						Log.d("MYDEBUG", "failed to connect message=" + e.getMessage());
 					}
 				}
 				
 				@Override
 				public void onFailure(Throwable e, JSONObject errorResponse){
-					Log.d("MYDEBUG", "async internet get failed\n" + e.getMessage());
+					Log.d("MYDEBUG", "async internet get failed message=" + e.getMessage());
 				}
 		});
 		Log.d("MYDEBUG", "get call made: " + query);
