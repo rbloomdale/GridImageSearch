@@ -71,6 +71,15 @@ public class ImageSearchActivity extends Activity {
 	        	startActivity(i);
 	        }
 	    });
+		gvResults.setOnScrollListener(new EndlessScrollListener() {
+		    @Override
+		    public void onLoadMore(int page, int totalItemsCount) {
+	                // Whatever code is needed to append new items to your AdapterView
+	                // probably sending out a network request and appending items to your adapter. 
+	                // Use the page or the totalItemsCount to retrieve correct data.
+		        performImageSearch(page); 
+		    }
+	        });
 		btnSearch = (Button) findViewById(R.id.btnSearch);
 		spColorOptions = (Spinner) findViewById(R.id.spColorOptions);
 		spSizeOptions = (Spinner) findViewById(R.id.spSizeOptions);
@@ -94,18 +103,22 @@ public class ImageSearchActivity extends Activity {
 	}
 	
 	public void onImageSearch(View v){
+		imageAdapter.clear();
+		performImageSearch(0);
+	}
+	
+	public void performImageSearch(int page){
 		final String query = etSearchField.getText().toString();
 		AsyncHttpClient client = new AsyncHttpClient();
 		String options = getAdvanceOptionsString();
 		client.get(
-			"https://ajax.googleapis.com/ajax/services/search/images?rsz=8&" + "start=" + 0 + "&v=1.0&q=" + Uri.encode(query) + options, 
+			"https://ajax.googleapis.com/ajax/services/search/images?rsz=8&" + "start=" + page*8 + "&v=1.0&q=" + Uri.encode(query) + options, 
 			new JsonHttpResponseHandler(){
 				@Override
 				public void onSuccess(JSONObject response){
 					JSONArray imageJsonResults = null;
 					try{
 						imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
-						imageAdapter.clear();
 						ArrayList<ImageResult> imageResults = ImageResult.fromJSONArray(imageJsonResults);
 						for (int i = 0; i < imageResults.size(); i++) {
 							imageAdapter.add(imageResults.get(i));
